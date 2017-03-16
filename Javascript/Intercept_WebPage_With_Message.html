@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script>
+
+function setCookie(cname,cvalue,exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    var expires = "expires=" + d.toGMTString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+function getCookie(cname) {
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for(var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
+
+function checkCookie() {
+    var cookie = getCookie("first_login");
+    var parameterValue = decodeURIComponent(window.location.search.match(/(\?|&)desturl\=([^&]*)/)[2]);
+    if (cookie != "") {
+        //Print stuff here
+        document.write("Redirecting to orgin url")
+        window.location = parameterValue
+    } else {
+        setCookie("first_login", false, 30);
+        document.write("Howdy it looks like this is your first time here, why don't you look at this ");
+        document.write("<a href=\"https://okta.teamhealth.com\">");
+        document.write("page?");
+        document.write("</a>");
+        document.write("</br>");
+        document.write("Your desturl is ");
+        document.write(parameterValue)
+    }
+}
+
+</script>
+</head>
+<body onload="checkCookie()">
+</body>
+</html>
